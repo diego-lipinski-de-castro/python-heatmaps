@@ -5,8 +5,8 @@ from folium.plugins import HeatMap
 import psycopg2
 
 param_dic = {
-    "host"      : "",
-    "database"  : "",
+    "host"      : "127.0.0.1",
+    "database"  : "logistics-core",
     "user"      : "",
     "password"  : ""
 }
@@ -56,7 +56,7 @@ def run():
     # column_names = ['y', 'x']
 
     # or you can use this way if youre using postgis columns datatype
-    query = 'select st_x(location::geometry) as x, st_y(location::geometry) as y from table'
+    query = 'select st_x(location::geometry) as x, st_y(location::geometry) as y from steps where prev_id is not null'
     column_names = ['x', 'y']
 
     df = postgresql_to_dataframe(conn, query, column_names)
@@ -69,7 +69,7 @@ def run():
 
     hmap.add_child(hm_wide)
 
-    hmap.save("generated/heatmap.html")
+    hmap.save("heatmap.html")
 
     close(conn)
     conn = None
